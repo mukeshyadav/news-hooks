@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 function App() {
   const [newsResults, setNewsResults] = useState([]);
   const [query, setQuery] = useState("react hooks");
+  const searchInputRef = useRef();
 
   useEffect(() => {
     getNewsData();
@@ -20,6 +21,11 @@ function App() {
     event.preventDefault();
     getNewsData();
   };
+
+  const handleClearSearch = () => {
+    setQuery("");
+    searchInputRef.current.focus();
+  };
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -27,8 +33,12 @@ function App() {
           type="search"
           value={query}
           onChange={event => setQuery(event.target.value)}
+          ref={searchInputRef}
         />
         <button type="submit">Seach</button>
+        <button type="button" onClick={handleClearSearch}>
+          Clear
+        </button>
       </form>
       <ul>
         {newsResults.map(news => (
