@@ -5,6 +5,7 @@ function App() {
   const [query, setQuery] = useState("react hooks");
   const searchInputRef = useRef();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getNewsData();
@@ -12,11 +13,15 @@ function App() {
 
   const getNewsData = async () => {
     setLoading(true);
-    const response = await fetch(
-      `http://hn.algolia.com/api/v1/search?query=${query}`
-    );
-    let responseData = await response.json();
-    setNewsResults(responseData.hits);
+    try {
+      const response = await fetch(
+        `http://hn.algolia.com/api/v1/searchquery=${query}`
+      );
+      let responseData = await response.json();
+      setNewsResults(responseData.hits);
+    } catch (err) {
+      setError(err);
+    }
     setLoading(false);
   };
 
@@ -54,6 +59,7 @@ function App() {
           ))
         )}
       </ul>
+      {error && <div>{error.message}</div>}
     </>
   );
 }
