@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 
 function App() {
   const [newsResults, setNewsResults] = useState([]);
-  const [query, setQuery] = useState("reacthooks");
+  const [query, setQuery] = useState("react hooks");
 
   useEffect(() => {
     getNewsData();
-  }, [query]);
+  }, []);
 
   const getNewsData = async () => {
     const response = await fetch(
@@ -15,9 +15,21 @@ function App() {
     let responseData = await response.json();
     setNewsResults(responseData.hits);
   };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    getNewsData();
+  };
   return (
     <>
-      <input type="search" onChange={event => setQuery(event.target.value)} />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="search"
+          value={query}
+          onChange={event => setQuery(event.target.value)}
+        />
+        <button type="submit">Seach</button>
+      </form>
       <ul>
         {newsResults.map(news => (
           <li key={news.objectID}>
